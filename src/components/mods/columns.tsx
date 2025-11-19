@@ -1,12 +1,7 @@
+import { Mod } from "@/models/mod";
 import { ColumnDef } from "@tanstack/react-table";
 
-export type ModColumn = {
-  name: string;
-  type: "client" | "server" | "both";
-  version: string;
-};
-
-export const columns: ColumnDef<ModColumn>[] = [
+export const columns: ColumnDef<Mod>[] = [
   {
     accessorKey: "name",
     size: 2, //fractional size
