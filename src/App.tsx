@@ -24,6 +24,7 @@ function App() {
         style={{ colorScheme: "light dark" }}
       >
         <div className="p-8 text-black dark:text-white">
+          <h1 className="mb-4 text-4xl font-bold">Alkazeroth's Mod Utils</h1>
           <Button onClick={openDialog}>
             <Folder className="size-8" /> Select folder
           </Button>

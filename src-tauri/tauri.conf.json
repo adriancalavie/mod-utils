@@ -13,9 +13,9 @@
     "windows": [
       {
         "title": "Alkazeroth's Mod Utils",
-         "width": 800,
+        "width": 800,
         "height": 450,
-        "minWidth": 450,
+        "minWidth": 500,
         "minHeight": 300,
         "transparent": true
       }
