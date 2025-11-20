@@ -37,6 +37,10 @@ function App() {
 
   const refreshMods = async () => {
     setLoading(true);
+    setProgress({
+      progress: 0,
+      status: "Refreshing mods...",
+    });
     const { mods } = await invoke<{ mods: Mod[] }>("load_mods", { directory });
     setLoading(false);
 
