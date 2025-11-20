@@ -1,7 +1,24 @@
 import { Mod } from "@/models/mod";
-import { ColumnDef } from "@tanstack/react-table";
+import { ArrowDown, ArrowUp } from "@nsmr/pixelart-react";
+import { Column, ColumnDef } from "@tanstack/react-table";
 import { Button } from "../ui/button";
 import { sortByType } from "./sorting";
+
+const SortIndicator = ({
+  sortStatus,
+}: {
+  sortStatus: ReturnType<Column<Mod>["getIsSorted"]>;
+}) => {
+  return (
+    <span className="inline-flex size-6 items-center justify-center">
+      {sortStatus === "asc" ? (
+        <ArrowUp className="size-6" />
+      ) : sortStatus === "desc" ? (
+        <ArrowDown className="size-6" />
+      ) : null}
+    </span>
+  );
+};
 
 export const columns: ColumnDef<Mod>[] = [
   {
@@ -15,6 +32,7 @@ export const columns: ColumnDef<Mod>[] = [
         onClick={column.getToggleSortingHandler()}
       >
         Mod Name
+        <SortIndicator sortStatus={column.getIsSorted()} />
       </Button>
     ),
     cell: ({ row }) => (
@@ -34,6 +52,7 @@ export const columns: ColumnDef<Mod>[] = [
         onClick={column.getToggleSortingHandler()}
       >
         Type
+        <SortIndicator sortStatus={column.getIsSorted()} />
       </Button>
     ),
     cell: ({ row }) => (
