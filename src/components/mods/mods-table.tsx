@@ -1,8 +1,8 @@
 import { AppStore, useAppStore } from "@/stores/app-store";
 import { useShallow } from "zustand/shallow";
 import { DataTable } from "../ui/data-table";
-import { Progress } from "../ui/progress";
 import { columns } from "./columns";
+import { LoadingProgress } from "./loading";
 
 const selector = (state: AppStore) => ({
   mods: state.mods,
@@ -17,18 +17,13 @@ export function ModsTable() {
 
   if (loading && progress) {
     return (
-      <div className="mx-auto flex w-full flex-col items-center">
-        <div className="flex w-[60%] flex-col gap-2">
-          <Progress value={computedProgress} />
-          {progress.status} - {computedProgress.toFixed(2)}%
-        </div>
-      </div>
+      <LoadingProgress value={computedProgress} status={progress.status} />
     );
-  } else if (mods.length === 0) {
-    return <div>No mods found</div>;
-  } else if (mods.length > 0) {
-    return <DataTable columns={columns} data={mods} />;
-  } else {
-    return null;
   }
+
+  if (mods.length === 0) {
+    return <p className="text-center">No mods found</p>;
+  }
+
+  return <DataTable columns={columns} data={mods} />;
 }

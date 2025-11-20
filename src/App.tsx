@@ -70,12 +70,12 @@ function App() {
           <h1 className="mb-4 text-4xl font-bold">Alkazeroth's Mod Utils</h1>
           <div className="flex justify-between gap-4 select-none">
             <Button onClick={openDialog}>
-              <Folder className="size-8" />
+              <Folder className="size-6" />
               Select folder
             </Button>
             {directory && (
               <Button onClick={refreshMods}>
-                <Reload className="size-8" />
+                <Reload className="size-6" />
                 Refresh mods
               </Button>
             )}
