@@ -1,6 +1,7 @@
 import { ModsTable } from "@/components/mods/mods-table";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
+import { useMinecraftFont } from "@/hooks/use-font";
 import { LoadingProgress } from "@/lib/types";
 import { Mod } from "@/models/mod";
 import { AppStore, useAppStore } from "@/stores/app-store";
@@ -21,6 +22,8 @@ const selector = (store: AppStore) => ({
 });
 
 function App() {
+  useMinecraftFont();
+
   const { directory, setDirectory, setMods, setProgress, setLoading } =
     useAppStore(useShallow(selector));
 
@@ -74,9 +77,9 @@ function App() {
               Select folder
             </Button>
             {directory && (
-              <Button onClick={refreshMods}>
+              <Button variant="secondary" onClick={refreshMods}>
                 <Reload className="size-6" />
-                Refresh mods
+                Refresh
               </Button>
             )}
           </div>
