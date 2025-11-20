@@ -16,8 +16,10 @@ fn apply_native_background(app: &tauri::App) {
 
 mod commands;
 mod hashing;
+mod http;
 mod modrinth;
 mod mods;
+mod utils;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {

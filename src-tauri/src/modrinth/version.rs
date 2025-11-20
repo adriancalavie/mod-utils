@@ -1,0 +1,38 @@
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+
+use crate::http::http_client;
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum Algorithm {
+    Sha1,
+    Sha512,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct BulkVersionFromHash {
+    hashes: Vec<String>,
+    algorithm: Algorithm,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct Version {
+    pub project_id: String,
+    pub version_number: String,
+}
+
+pub type VersionsResponse = HashMap<String, Version>;
+
+const BULK_VERSIONS_URL: &str = "https://api.modrinth.com/v2/version_files";
+
+pub fn get_versions(hashes: Vec<String>) -> Result<VersionsResponse, reqwest::Error> {
+    let client = http_client();
+    let body = BulkVersionFromHash {
+        hashes,
+        algorithm: Algorithm::Sha512,
+    };
+    let response = client.post(BULK_VERSIONS_URL).json(&body).send()?;
+    let response_json = response.json::<VersionsResponse>()?;
+    Ok(response_json)
+}

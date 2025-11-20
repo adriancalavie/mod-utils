@@ -15,17 +15,19 @@ export const columns: ColumnDef<Mod>[] = [
   {
     accessorKey: "type",
     size: 1, //fractional size
-    header: () => <div className="text-left text-2xl">Type</div>,
+    header: () => <div className="w-full text-left text-2xl">Type</div>,
     cell: ({ row }) => (
       <div className="text-left text-lg">{row.getValue("type")}</div>
     ),
   },
   {
     accessorKey: "version",
-    size: 110, //fixed size in pixels
-    header: () => <div className="text-right text-2xl">Version</div>,
+    size: 1, //fractional size
+    header: () => <div className="w-full text-right text-2xl">Version</div>,
     cell: ({ row }) => (
-      <div className="text-right text-lg">{row.getValue("version")}</div>
+      <div className="overflow-hidden text-right text-lg text-ellipsis">
+        {row.getValue("version")}
+      </div>
     ),
   },
 ];
