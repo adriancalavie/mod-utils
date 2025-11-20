@@ -41,7 +41,7 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
       data-slot="table-footer"
       className={cn(
         "bg-muted/50 border-t font-medium [&>tr]:last:border-b-0",
-        className
+        className,
       )}
       {...props}
     />
@@ -54,7 +54,7 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
       data-slot="table-row"
       className={cn(
         "hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors",
-        className
+        className,
       )}
       {...props}
     />
@@ -66,8 +66,8 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
     <th
       data-slot="table-head"
       className={cn(
-        "text-foreground h-10 px-2 text-left align-middle font-medium truncate flex items-center [&:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-0.5",
-        className
+        "text-foreground flex h-10 items-center truncate text-left align-middle font-medium [&:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-0.5",
+        className,
       )}
       {...props}
     />
@@ -79,8 +79,8 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
     <td
       data-slot="table-cell"
       className={cn(
-        "py-2 px-2 align-middle truncate [&:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-0.5",
-        className
+        "truncate px-2 py-2 align-middle [&:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-0.5",
+        className,
       )}
       {...props}
     />
@@ -101,6 +101,12 @@ function TableCaption({
 }
 
 export {
-  Table, TableBody, TableCaption, TableCell, TableFooter,
-  TableHead, TableHeader, TableRow
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
 };
