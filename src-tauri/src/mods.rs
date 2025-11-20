@@ -1,17 +1,9 @@
 use serde::{Deserialize, Serialize};
-use std::{
-    collections::HashMap,
-    fs,
-    path::{Path, PathBuf},
-};
+use std::path::PathBuf;
 
-use crate::{
-    hashing::file_tosha512,
-    modrinth::{
-        project::{get_projects, Project, SupportValue},
-        version::{get_versions, Version},
-    },
-    utils::combine,
+use crate::modrinth::{
+    project::{Project, SupportValue},
+    version::Version,
 };
 
 #[derive(Clone, Serialize, Deserialize)]
@@ -30,7 +22,7 @@ pub struct Mod {
     mod_type: ModType,
 }
 
-fn to_mod_type(version: Version, project: Project) -> Mod {
+pub fn to_mod_type(version: Version, project: Project) -> Mod {
     use SupportValue::*;
 
     let client_active = matches!(project.client_side, Required | Optional);
@@ -50,49 +42,6 @@ fn to_mod_type(version: Version, project: Project) -> Mod {
     }
 }
 
-fn is_jar_file(path: &PathBuf) -> bool {
+pub fn is_jar_file(path: &PathBuf) -> bool {
     path.is_file() && path.extension().map_or(false, |ext| ext == "jar")
-}
-
-pub fn get_mods(dir: &Path) -> Vec<Mod> {
-    if !dir.is_dir() {
-        return vec![];
-    }
-
-    let hash_to_name: HashMap<String, String> = fs::read_dir(dir)
-        .unwrap()
-        .filter_map(|e| e.ok().map(|e| e.path()))
-        .filter(is_jar_file)
-        .map(|path| {
-            let hash = file_tosha512(&path);
-            let name = path.file_stem().unwrap().to_string_lossy().to_string();
-            (hash, name)
-        })
-        .collect();
-
-    let hashes = hash_to_name.keys().cloned().collect();
-    let versions_response = get_versions(hashes);
-
-    let ids: Vec<String> = versions_response
-        .as_ref()
-        .unwrap()
-        .values()
-        .map(|v| v.project_id.clone())
-        .collect();
-
-    let projects_response = get_projects(ids);
-
-    let versions = versions_response
-        .unwrap()
-        .values()
-        .map(|v| v.clone())
-        .collect();
-
-    let projects = projects_response
-        .unwrap()
-        .into_iter()
-        .map(|p| p.clone())
-        .collect();
-
-    combine(versions, projects, to_mod_type)
 }

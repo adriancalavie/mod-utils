@@ -26,14 +26,14 @@ pub type GetProjectsResponse = Vec<Project>;
 
 const BULK_PROJECTS_URL: &str = "https://api.modrinth.com/v2/projects";
 
-pub fn get_projects(ids: Vec<String>) -> Result<GetProjectsResponse, reqwest::Error> {
+pub async fn get_projects(ids: Vec<String>) -> Result<GetProjectsResponse, reqwest::Error> {
     let client = http_client();
 
     let ids_json = to_string(&ids).expect("Failed to serialize ids");
     let url = Url::parse_with_params(BULK_PROJECTS_URL, &[("ids", &ids_json)])
         .expect("Failed to build URL");
 
-    let response = client.get(url).send()?;
-    let projects = response.json::<GetProjectsResponse>()?;
+    let response = client.get(url).send().await?;
+    let projects = response.json::<GetProjectsResponse>().await?;
     Ok(projects)
 }

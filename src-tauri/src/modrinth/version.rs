@@ -26,13 +26,13 @@ pub type VersionsResponse = HashMap<String, Version>;
 
 const BULK_VERSIONS_URL: &str = "https://api.modrinth.com/v2/version_files";
 
-pub fn get_versions(hashes: Vec<String>) -> Result<VersionsResponse, reqwest::Error> {
+pub async fn get_versions(hashes: Vec<String>) -> Result<VersionsResponse, reqwest::Error> {
     let client = http_client();
     let body = BulkVersionFromHash {
         hashes,
         algorithm: Algorithm::Sha512,
     };
-    let response = client.post(BULK_VERSIONS_URL).json(&body).send()?;
-    let response_json = response.json::<VersionsResponse>()?;
+    let response = client.post(BULK_VERSIONS_URL).json(&body).send().await?;
+    let response_json = response.json::<VersionsResponse>().await?;
     Ok(response_json)
 }

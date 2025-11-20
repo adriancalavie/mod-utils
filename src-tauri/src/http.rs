@@ -1,5 +1,5 @@
 use once_cell::sync::Lazy;
-use reqwest::blocking::Client;
+use reqwest::Client;
 
 static HTTP_CLIENT: Lazy<Client> = Lazy::new(|| {
     Client::builder()
