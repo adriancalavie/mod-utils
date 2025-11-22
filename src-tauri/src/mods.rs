@@ -15,11 +15,14 @@ pub enum ModType {
 }
 
 #[derive(Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Mod {
     name: String,
     version: String,
     #[serde(rename = "type")]
     mod_type: ModType,
+    icon_url: String,
+    file_name: String,
 }
 
 pub fn to_mod_type(version: Version, project: Project) -> Mod {
@@ -39,6 +42,8 @@ pub fn to_mod_type(version: Version, project: Project) -> Mod {
         name: project.title,
         version: version.version_number,
         mod_type,
+        icon_url: project.icon_url.unwrap_or_default(),
+        file_name: version.files.first().unwrap().filename.clone(),
     }
 }
 

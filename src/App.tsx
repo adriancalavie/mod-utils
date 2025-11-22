@@ -10,6 +10,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 import { open } from "@tauri-apps/plugin-dialog";
 import { useEffect } from "react";
+import { Toaster } from "sonner";
 import { useShallow } from "zustand/shallow";
 import "./App.css";
 
@@ -95,6 +96,7 @@ function App() {
           </div>
         </div>
       </main>
+      <Toaster />
     </ThemeProvider>
   );
 }

@@ -17,9 +17,16 @@ pub struct BulkVersionFromHash {
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct ModrinthFile {
+    pub url: String,
+    pub filename: String,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Version {
     pub project_id: String,
     pub version_number: String,
+    pub files: Vec<ModrinthFile>,
 }
 
 pub type VersionsResponse = HashMap<String, Version>;
