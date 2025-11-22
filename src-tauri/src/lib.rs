@@ -1,5 +1,8 @@
 use tauri::Manager;
+#[cfg(target_os = "windows")]
 use window_vibrancy::apply_mica;
+#[cfg(target_os = "macos")]
+use window_vibrancy::{apply_liquid_glass, NSGlassEffectViewStyle};
 
 use crate::commands::load_mods;
 
