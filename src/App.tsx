@@ -13,6 +13,12 @@ import { useEffect } from "react";
 import { Toaster } from "sonner";
 import { useShallow } from "zustand/shallow";
 import "./App.css";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./components/ui/tooltip";
 
 const selector = (store: AppStore) => ({
   directory: store.directory,
@@ -89,9 +95,20 @@ function App() {
             )}
           </div>
           <div className="flex flex-col gap-4">
-            <h2 className="mt-4 overflow-hidden text-2xl text-ellipsis">
-              {directory ? directory : "No folder selected"}
-            </h2>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <h2 className="mt-4 truncate overflow-hidden text-2xl whitespace-nowrap">
+                    {directory ?? "No folder selected"}
+                  </h2>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="max-w-xs break-all">
+                    {directory ?? "No folder selected"}
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <ModsTable />
           </div>
         </div>
