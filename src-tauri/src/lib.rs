@@ -10,7 +10,7 @@ fn apply_native_background(app: &tauri::App) {
     let window = app.get_webview_window("main").unwrap();
 
     #[cfg(target_os = "macos")]
-    apply_liquid_glass(window, NSGlassEffectViewStyle::Clear, None, Some(26.0))
+    apply_liquid_glass(window, NSGlassEffectViewStyle::Clear, None, None)
         .expect("Unsupported platform! 'apply_liquid_glass' is only supported on macOS 26+");
 
     #[cfg(target_os = "windows")]
