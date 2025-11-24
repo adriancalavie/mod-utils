@@ -2,7 +2,7 @@ use crate::{
     hashing::file_tosha512,
     modrinth::{project::get_projects, version::get_versions},
     mods::{is_jar_file, to_mod_type, Mod},
-    utils::{combine, proportional_clamp_f32},
+    utils::proportional_clamp_f32,
 };
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, fs, path::PathBuf};
@@ -97,21 +97,43 @@ pub async fn load_mods(app: tauri::AppHandle, directory: String) -> Result<ModsP
 
     let _ = tx.send(LoadModsProgress {
         status: "Fetching projects".into(),
-        progress: 0.95,
+        progress: 0.90,
     });
     let ids = versions.values().map(|v| v.project_id.clone()).collect();
     let projects = get_projects(ids).await.map_err(|e| e.to_string())?;
+
+    let _ = tx.send(LoadModsProgress {
+        status: "Processing results".into(),
+        progress: 0.94,
+    });
+
+    let versions_map: HashMap<_, _> = versions
+        .values()
+        .cloned()
+        .map(|v| (v.project_id.clone(), v))
+        .collect();
+
+    let _ = tx.send(LoadModsProgress {
+        status: "Processing results".into(),
+        progress: 0.97,
+    });
+
+    let projects_map: HashMap<_, _> = projects.into_iter().map(|p| (p.id.clone(), p)).collect();
+
+    let _ = tx.send(LoadModsProgress {
+        status: "Processing results".into(),
+        progress: 0.99,
+    });
+
+    let mods = versions_map
+        .into_iter()
+        .filter_map(|(id, v)| projects_map.get(&id).map(|p| to_mod_type(v, p.clone())))
+        .collect();
 
     let _ = tx.send(LoadModsProgress {
         status: "Finished".into(),
         progress: 1.0,
     });
 
-    Ok(ModsPayload {
-        mods: combine(
-            versions.values().cloned().collect(),
-            projects.into_iter().collect(),
-            to_mod_type,
-        ),
-    })
+    Ok(ModsPayload { mods })
 }

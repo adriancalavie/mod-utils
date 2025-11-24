@@ -1,38 +1,3 @@
-/// Combines two vectors element-wise using a provided function.
-///
-/// # Parameters
-/// - `first`: The first vector.
-/// - `second`: The second vector.
-/// - `f`: A function that takes one element from each vector and returns a new value.
-///
-/// # Returns
-/// A vector containing the results of applying `f` to each pair of elements from `first` and `second`.
-///
-/// The length of the resulting vector is equal to the shorter of the two input vectors.
-///
-/// # Examples
-/// ```
-/// let v1 = vec![1, 2, 3];
-/// let v2 = vec![4, 5, 6];
-/// let result = combine(v1, v2, |a, b| a + b);
-/// assert_eq!(result, vec![5, 7, 9]);
-///
-/// let v1 = vec![1, 2];
-/// let v2 = vec![10, 20, 30];
-/// let result = combine(v1, v2, |a, b| a * b);
-/// assert_eq!(result, vec![10, 40]); // stops at the shorter vector
-/// ```
-pub fn combine<T, U, V, F>(first: Vec<T>, second: Vec<U>, f: F) -> Vec<V>
-where
-    F: Fn(T, U) -> V,
-{
-    first
-        .into_iter()
-        .zip(second.into_iter())
-        .map(|(a, b)| f(a, b))
-        .collect()
-}
-
 /// Clamps a `value` to the `original_min..=original_max` range and maps it proportionally
 /// to a new range `new_min..=new_max`.
 ///
