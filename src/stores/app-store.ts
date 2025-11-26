@@ -1,6 +1,10 @@
 import { LoadingProgress } from "@/lib/types";
 import { Mod } from "@/models/mod";
-import { PaginationState, SortingState } from "@tanstack/react-table";
+import {
+  ColumnFiltersState,
+  PaginationState,
+  SortingState,
+} from "@tanstack/react-table";
 import { invoke } from "@tauri-apps/api/core";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -12,6 +16,7 @@ type AppStoreState = {
   loadingProgress: LoadingProgress | null;
   sorting: SortingState;
   pagination: PaginationState;
+  filtering: ColumnFiltersState;
 };
 
 type AppStoreActions = {
@@ -21,6 +26,7 @@ type AppStoreActions = {
   setLoading: (loading: boolean) => void;
   setSorting: (sorting: SortingState) => void;
   setPagination: (pagination: PaginationState) => void;
+  setFiltering: (filtering: ColumnFiltersState) => void;
 };
 
 export type AppStore = AppStoreState & AppStoreActions;
@@ -37,6 +43,12 @@ export const useAppStore = create<AppStore>()(
         pageIndex: 0,
         pageSize: 25,
       },
+      filtering: [
+        {
+          id: "type",
+          value: ["client", "server", "both"],
+        },
+      ],
       setDirectory: async (directory: string) => {
         set({ directory });
 
@@ -64,6 +76,9 @@ export const useAppStore = create<AppStore>()(
       setPagination: (pagination: PaginationState) => {
         set({ pagination });
       },
+      setFiltering: (filtering: ColumnFiltersState) => {
+        set({ filtering });
+      },
     }),
     {
       name: "app-store",
@@ -72,6 +87,7 @@ export const useAppStore = create<AppStore>()(
         mods: state.mods,
         sorting: state.sorting,
         pagination: state.pagination,
+        filtering: state.filtering,
       }),
     },
   ),

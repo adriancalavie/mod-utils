@@ -2,6 +2,7 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
@@ -30,6 +31,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./select";
+import { Input } from "./input";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "./dropdown-menu";
+import { Environment } from "@/models/mod";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -39,17 +48,24 @@ interface DataTableProps<TData, TValue> {
 const selector = (state: AppStore) => ({
   sorting: state.sorting,
   pagination: state.pagination,
+  columnFilters: state.filtering,
   setSorting: state.setSorting,
   setPagination: state.setPagination,
+  setFiltering: state.setFiltering,
 });
 
 export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const { sorting, pagination, setSorting, setPagination } = useAppStore(
-    useShallow(selector),
-  );
+  const {
+    sorting,
+    pagination,
+    columnFilters,
+    setSorting,
+    setPagination,
+    setFiltering,
+  } = useAppStore(useShallow(selector));
 
   const table = useReactTable({
     data,
@@ -57,23 +73,17 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     onSortingChange: (u) => setSorting(applyUpdater(sorting, u)),
     onPaginationChange: (u) => setPagination(applyUpdater(pagination, u)),
+    onColumnFiltersChange: (u) => setFiltering(applyUpdater(columnFilters, u)),
     enableMultiSort: true,
     state: {
       sorting,
       pagination,
+      columnFilters,
     },
   });
-
-  const gridTemplateColumns = columns
-    .map((col) => {
-      if (col.size === undefined || col.size < 10) {
-        return `${col.size || 1}fr`;
-      }
-      return `${col.size}px`;
-    })
-    .join(" ");
 
   useEffect(() => {
     const keydownHandler = (event: KeyboardEvent) => {
@@ -91,12 +101,68 @@ export function DataTable<TData, TValue>({
     };
   }, []);
 
+  const gridTemplateColumns = columns
+    .map((col) => {
+      if (col.size === undefined || col.size < 10) {
+        return `${col.size || 1}fr`;
+      }
+      return `${col.size}px`;
+    })
+    .join(" ");
+
+  const typeCol = table.getColumn("type");
+
+  const isChecked = (type: Environment) => {
+    const valueArray = (typeCol?.getFilterValue() as Environment[]) || [];
+    return valueArray.includes(type);
+  };
+
+  const toggleChecked = (type: Environment) => {
+    const valueArray = (typeCol?.getFilterValue() as Environment[]) || [];
+    const newValueArray = valueArray.includes(type)
+      ? valueArray.filter((t) => t !== type)
+      : [...valueArray, type];
+    typeCol?.setFilterValue(newValueArray);
+  };
+
   return (
     <div>
       <div className="flex items-center justify-end gap-1 py-2 select-none">
+        <Input
+          placeholder="Filter mods..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("name")?.setFilterValue(event.target.value)
+          }
+        />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">Type</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuCheckboxItem
+              checked={isChecked("client")}
+              onCheckedChange={() => toggleChecked("client")}
+            >
+              client
+            </DropdownMenuCheckboxItem>
+            <DropdownMenuCheckboxItem
+              checked={isChecked("server")}
+              onCheckedChange={() => toggleChecked("server")}
+            >
+              server
+            </DropdownMenuCheckboxItem>
+            <DropdownMenuCheckboxItem
+              checked={isChecked("both")}
+              onCheckedChange={() => toggleChecked("both")}
+            >
+              both
+            </DropdownMenuCheckboxItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <Select
-          onValueChange={(value) => table.setPageSize(Number(value))}
           value={table.getState().pagination.pageSize.toString()}
+          onValueChange={(value) => table.setPageSize(Number(value))}
         >
           <SelectTrigger>
             <SelectValue placeholder="Select a page size" />

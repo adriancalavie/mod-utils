@@ -1,4 +1,4 @@
-import { Mod } from "@/models/mod";
+import { Environment, Mod } from "@/models/mod";
 import { ArrowDown, ArrowUp } from "@nsmr/pixelart-react";
 import { Column, ColumnDef } from "@tanstack/react-table";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -80,6 +80,10 @@ export const columns: ColumnDef<Mod>[] = [
     accessorKey: "type",
     size: 1, //fractional size
     sortingFn: sortByType,
+    filterFn: (row, columnId, value: Environment[]) => {
+      const rowValue = row.getValue(columnId) as Environment;
+      return value.includes(rowValue);
+    },
     header: ({ column }) => (
       <Button
         variant="ghost"
