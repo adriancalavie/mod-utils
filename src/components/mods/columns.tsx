@@ -31,7 +31,6 @@ const getFallbackName = (name: string) => {
 export const columns: ColumnDef<Mod>[] = [
   {
     accessorKey: "name",
-    size: 2, //fractional size
     sortingFn: "alphanumeric",
     header: ({ column }) => (
       <Button
@@ -78,7 +77,6 @@ export const columns: ColumnDef<Mod>[] = [
   },
   {
     accessorKey: "type",
-    size: 1, //fractional size
     sortingFn: sortByType,
     filterFn: (row, columnId, value: Environment[]) => {
       const rowValue = row.getValue(columnId) as Environment;
@@ -95,12 +93,11 @@ export const columns: ColumnDef<Mod>[] = [
       </Button>
     ),
     cell: ({ row }) => (
-      <div className="text-left text-lg">{row.getValue("type")}</div>
+      <div className="text-center text-lg">{row.getValue("type")}</div>
     ),
   },
   {
     accessorKey: "version",
-    size: 1, //fractional size
     header: () => (
       <div className="w-full px-2 text-right text-2xl select-none">Version</div>
     ),
