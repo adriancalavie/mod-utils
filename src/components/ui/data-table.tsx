@@ -100,7 +100,7 @@ export function DataTable<TData, TValue>({
                   style={{ gridTemplateColumns }}
                 >
                   {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id} className="p-2">
+                    <TableHead key={header.id}>
                       {flexRender(
                         header.column.columnDef.header,
                         header.getContext(),
