@@ -1,23 +1,23 @@
+import { Environment } from "@/models/mod";
 import { ArrowLeft, ArrowRight } from "@nsmr/pixelart-react";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuCheckboxItem,
-} from "./dropdown-menu";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectGroup,
-  SelectLabel,
-  SelectItem,
-} from "./select";
 import { Table } from "@tanstack/react-table";
 import { Button } from "./button";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "./dropdown-menu";
 import { Input } from "./input";
-import { Environment } from "@/models/mod";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "./select";
 
 type ControlsProps<TData> = {
   table: Table<TData>;
